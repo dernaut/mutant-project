@@ -1,59 +1,158 @@
-# MutantProject
+# 🧬 ADN Scanner — Mutant Detector
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.1.
+Sistema de detección de mutantes basado en análisis de secuencias de ADN, desarrollado con **Angular** y desplegable con **Docker**.
 
-## Development server
+---
 
-To start a local development server, run:
+## ¿Qué hace?
 
-```bash
-ng serve
+Analiza una matriz de ADN (NxN) e identifica si un humano es **mutante** o **humano normal** buscando secuencias repetidas de bases nitrogenadas en múltiples direcciones.
+
+Un humano es **mutante** si su ADN contiene **más de una secuencia de 4 letras iguales consecutivas** en cualquiera de estas direcciones:
+
+| Dirección | Ejemplo |
+|---|---|
+| Horizontal → | `CCCC` |
+| Vertical ↓ | columna con `AAAA` |
+| Diagonal ↘ | diagonal principal con `GGGG` |
+| Diagonal ↗ | diagonal inversa con `TTTT` |
+
+---
+
+## Ejemplos
+
+### 🧬 Caso Mutante — `isMutant(dna)` retorna `true`
+
+```
+A T G C G A
+C A G T G C
+T T T T G T   ← secuencia TTTT (horizontal)
+A G A A G G
+C C C C T A   ← secuencia CCCC (horizontal)
+T C A C T G
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Se encuentran **2 secuencias**: `TTTT` y `CCCC` → **MUTANTE** ✅
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### 🧑 Caso Humano — `isMutant(dna)` retorna `false`
 
-```bash
-ng generate component component-name
+```
+A T G C G A
+C A G T G C
+T T A T T T
+A G A C G G
+G C G T C A
+T C A C T G
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+No se encuentran más de una secuencia de 4 letras iguales → **HUMANO** ❌
 
-```bash
-ng generate --help
+---
+
+## Algoritmo
+
+```typescript
+isMutant(dna: string[]): boolean
 ```
 
-## Building
+### Características
 
-To build the project run:
+- **Complejidad**: `O(N²)` — recorre cada celda de la matriz una sola vez
+- **Early exit**: detiene la búsqueda inmediatamente al encontrar la segunda secuencia, sin recorrer el resto de la matriz
+- **4 direcciones de búsqueda**: horizontal, vertical, diagonal ↘ y diagonal ↗
+- **Validación de entrada**: solo acepta bases nitrogenadas válidas (`A`, `T`, `C`, `G`) y matriz cuadrada NxN
 
-```bash
-ng build
+### Flujo del algoritmo
+
+```
+Para cada celda (r, c) de la matriz:
+  Para cada dirección [dr, dc]:
+    Verificar si hay 4 letras iguales consecutivas
+    Si se encuentra una secuencia → contador++
+    Si contador > 1 → retornar true (early exit)
+Retornar false
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## Estructura del proyecto
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
+```
+mutant-project/
+├── src/
+│   └── app/
+│       ├── core/
+│       │   └── mutant.service.ts        ← algoritmo principal
+│       ├── components/
+│       │   └── dna-scanner/
+│       │       ├── dna-scanner.component.ts    ← lógica del componente
+│       │       ├── dna-scanner.component.html  ← template
+│       │       └── dna-scanner.component.scss  ← estilos
+│       ├── models/
+│       │   └── mutant.model.ts          ← interfaces TypeScript
+│       └── app.component.ts
+├── Dockerfile                           ← build con Node + Nginx
+├── docker-compose.yml                   ← orquestación
+├── nginx.conf                           ← config para Angular SPA
+└── README.md
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Stack tecnológico
+
+| Tecnología | Uso |
+|---|---|
+| Angular | Framework frontend (Standalone Components) |
+| TypeScript | Lenguaje principal |
+| SCSS + Bootstrap | Estilos |
+| Angular Animations | Animaciones de UI |
+| Docker + Nginx | Contenedorización y despliegue |
+
+---
+
+## Ejecución con Docker
 
 ```bash
-ng e2e
+# 1. Clonar el repositorio
+git clone https://github.com/dernaut/mutant-project.git
+cd mutant-project
+
+# 2. Construir y levantar el contenedor
+docker compose up --build
+
+# 3. Abrir en el navegador
+http://localhost:4200
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Ejecución local
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```bash
+# 1. Instalar dependencias
+npm install
+
+# 2. Levantar servidor de desarrollo
+npm start
+
+# 3. Abrir en el navegador
+http://localhost:4200
+```
+
+---
+
+## Uso de la aplicación
+
+1. Ingresa las filas del ADN en los campos de texto (solo caracteres `A`, `T`, `C`, `G`)
+2. Puedes usar los botones **Cargar Mutante** o **Cargar Humano** para cargar datos de prueba
+3. Presiona **EJECUTAR ANÁLISIS**
+4. El sistema mostrará el resultado y resaltará visualmente las secuencias detectadas en la matriz
+
+---
+
+## Autor
+
+Desarrollado por **Julian Giraldo Cardona** como parte del taller de Full Stack **SETI**.
