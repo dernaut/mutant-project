@@ -153,6 +153,23 @@ http://localhost:4200
 
 ---
 
+# Evidencia de funcionamiento
+
+## Ejecución con Docker
+
+<img width="1229" height="404" alt="image" src="https://github.com/user-attachments/assets/e289d936-58d9-4cee-94f3-bdb2dcdf85f1" />
+
+## Prueba de la página web
+
+<img width="875" height="829" alt="image" src="https://github.com/user-attachments/assets/361a6a58-e10a-4af8-98c2-7db82b2f85bf" />
+
+<img width="875" height="1006" alt="image" src="https://github.com/user-attachments/assets/1810139d-ec8f-42db-a898-7b54cf243dea" />
+
+<img width="875" height="1006" alt="image" src="https://github.com/user-attachments/assets/52fa55e8-7311-4fc1-8cee-8bf37de16d6d" />
+
+
+---
+
 ## Autor
 
 Desarrollado por **Julian Giraldo Cardona** como parte del taller de Full Stack **SETI**.
