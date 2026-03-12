@@ -1,0 +1,77 @@
+<div class="input-wrapper">
+
+  <label class="input-label">
+    @if (dnaRows().length < 6) {
+      INGRESE FILA {{ dnaRows().length + 1 }} DE 6
+    } @else {
+      MATRIZ COMPLETA PARA ANÁLISIS
+    }
+  </label>
+
+  <div class="input-container">
+    <span class="scanner-icon">🧬</span>
+    <input
+      type="text"
+      placeholder="ATGCAT"
+      [value]="dnaSequence()"
+      (input)="handleInput($event)"
+      (keyup.enter)="addRow()"
+      [disabled]="dnaRows().length === 6"
+    >
+    <span class="char-counter" [class.ready]="dnaSequence().length === 6">
+      {{ dnaSequence().length }}/6
+    </span>
+  </div>
+
+  <div class="examples-wrapper">
+    <p class="input-label-small">CARGA RÁPIDA (TESTING)</p>
+    <div class="button-group">
+      <button class="example-btn human" (click)="loadExample('human')">
+        🧬 CARGAR HUMANO
+      </button>
+      <button class="example-btn mutant" (click)="loadExample('mutant')">
+        🧪 CARGAR MUTANTE
+      </button>
+    </div>
+  </div>
+
+  <button
+  class="scan-button"
+  (click)="dnaRows().length === 6 ? processDNA() : addRow()"
+  [disabled]="dnaSequence().length !== 6 && dnaRows().length < 6"
+>
+  @if (dnaRows().length === 6) {
+    EJECUTAR ANÁLISIS SISTÉMICO
+  } @else if (dnaRows().length === 5) {
+    FINALIZAR Y ESCANEAR
+  } @else {
+    AÑADIR FILA
+  }
+</button>
+
+  <hr class="separator">
+
+  <div class="sequences-container">
+    <h3 class="input-label-small">SECUENCIAS CARGADAS</h3>
+
+    <div class="dna-list">
+      @for (row of dnaRows(); track $index) {
+        <div class="dna-item">
+          <span class="dna-index">#{{ $index + 1 }}</span>
+          <span class="dna-text">{{ row }}</span>
+          <button class="delete-btn" (click)="removeRow($index)">
+            &times;
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-msg">No hay secuencias en memoria</p>
+      }
+    </div>
+  </div>
+
+  @if (dnaRows().length > 0) {
+    <button class="reset-btn" (click)="dnaRows.set([])">
+      LIMPIAR TODO
+    </button>
+  }
+</div>
