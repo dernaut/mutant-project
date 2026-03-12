@@ -1,0 +1,7 @@
+services:
+  mutant-detector:
+    build: .
+    container_name: mutant-detector
+    ports:
+      - "4200:80"
+    restart: unless-stopped
