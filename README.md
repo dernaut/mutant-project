@@ -86,12 +86,10 @@ mutant-project/
 │       ├── core/
 │       │   └── mutant.service.ts        ← algoritmo principal
 │       ├── components/
-│       │   └── dna-scanner/
-│       │       ├── dna-scanner.component.ts    ← lógica del componente
-│       │       ├── dna-scanner.component.html  ← template
-│       │       └── dna-scanner.component.scss  ← estilos
-│       ├── models/
-│       │   └── mutant.model.ts          ← interfaces TypeScript
+│       │   └── adn-scanner/
+│       │       ├── adn-scanner.component.ts    ← lógica del componente
+│       │       ├── adn-scanner.component.html  ← template
+│       │       └── adn-scanner.component.css  ← estilos
 │       └── app.component.ts
 ├── Dockerfile                           ← build con Node + Nginx
 ├── docker-compose.yml                   ← orquestación
